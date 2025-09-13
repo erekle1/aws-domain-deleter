@@ -20,7 +20,7 @@ class ClientFactory
 
     /**
      * Create a properly configured Route53 client
-     * 
+     *
      * @return Route53Client
      * @throws AwsException
      */
@@ -52,7 +52,7 @@ class ClientFactory
     /**
      * Create a properly configured Route53Domains client
      * Note: Route53Domains service is only available in us-east-1
-     * 
+     *
      * @return Route53DomainsClient
      * @throws AwsException
      */
@@ -83,14 +83,14 @@ class ClientFactory
 
     /**
      * Test AWS connection
-     * 
+     *
      * @return bool
      * @throws AwsException
      */
     public function testConnection(): bool
     {
         $client = $this->createRoute53Client();
-        
+
         try {
             $client->listHostedZones(['MaxItems' => 1]);
             return true;
@@ -101,7 +101,7 @@ class ClientFactory
 
     /**
      * Get credential source for display
-     * 
+     *
      * @return string
      */
     public function getCredentialSource(): string

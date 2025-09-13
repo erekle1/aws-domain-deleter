@@ -20,7 +20,7 @@ class Route53DomainsService
 
     /**
      * Check if a domain is registered in Route 53 Domains
-     * 
+     *
      * @param string $domain
      * @return array|null
      */
@@ -42,8 +42,10 @@ class Route53DomainsService
             ];
         } catch (AwsException $e) {
             // Domain not found or access denied
-            if (strpos($e->getMessage(), 'InvalidInput') !== false || 
-                strpos($e->getMessage(), 'DomainNotFound') !== false) {
+            if (
+                strpos($e->getMessage(), 'InvalidInput') !== false ||
+                strpos($e->getMessage(), 'DomainNotFound') !== false
+            ) {
                 return null;
             }
             throw $e;
@@ -52,7 +54,7 @@ class Route53DomainsService
 
     /**
      * Disable auto-renewal for a domain
-     * 
+     *
      * @param string $domain
      * @return bool
      */
@@ -77,7 +79,7 @@ class Route53DomainsService
 
     /**
      * Delete domain registration permanently (IRREVERSIBLE!)
-     * 
+     *
      * @param string $domain
      * @return array
      */
@@ -99,7 +101,7 @@ class Route53DomainsService
 
             echo "    -> ⚠️ PERMANENTLY DELETED domain registration: {$domain}\n";
             echo "    -> Operation ID: " . ($result['OperationId'] ?? 'N/A') . "\n";
-            
+
             return [
                 'success' => true,
                 'message' => 'Domain registration permanently deleted',
@@ -120,7 +122,7 @@ class Route53DomainsService
     /**
      * Transfer domain to another registrar (deletion alternative)
      * Note: This is safer than permanent deletion
-     * 
+     *
      * @param string $domain
      * @param string $authCode
      * @return array
@@ -138,7 +140,7 @@ class Route53DomainsService
         // Note: AWS Route 53 Domains doesn't have a direct "transfer out" API
         // This would need to be done manually through the AWS console or by
         // contacting AWS support for bulk transfers
-        
+
         return [
             'success' => false,
             'message' => 'Domain transfer out must be initiated manually through AWS console',
@@ -155,7 +157,7 @@ class Route53DomainsService
 
     /**
      * Process domain registration deletion (disable renewal + provide instructions)
-     * 
+     *
      * @param string $domain
      * @return array
      */
@@ -166,7 +168,7 @@ class Route53DomainsService
 
             // Check if domain is registered with Route 53
             $domainInfo = $this->getDomainInfo($domain);
-            
+
             if (!$domainInfo) {
                 echo "  -> Domain '{$domain}' is not registered with Route 53 Domains. Skipping.\n";
                 return [
@@ -189,14 +191,14 @@ class Route53DomainsService
                 echo "  ⚠️ PERMANENT DELETION MODE ENABLED\n";
                 $deletionResult = $this->deleteDomainRegistration($domain);
                 $results['domain_deleted'] = $deletionResult;
-                
+
                 if ($deletionResult['success']) {
                     if ($this->dryRun) {
                         echo "  ✅ [DRY RUN] Domain registration would be PERMANENTLY DELETED: {$domain}\n\n";
                     } else {
                         echo "  ✅ Domain registration PERMANENTLY DELETED: {$domain}\n\n";
                     }
-                    
+
                     return [
                         'success' => true,
                         'skipped' => false,
@@ -240,10 +242,9 @@ class Route53DomainsService
                 'results' => $results,
                 'message' => 'Auto-renewal disabled, manual transfer required'
             ];
-
         } catch (AwsException $e) {
             echo "  ❌ Error processing domain registration '{$domain}': " . $e->getMessage() . "\n\n";
-            
+
             return [
                 'success' => false,
                 'skipped' => false,

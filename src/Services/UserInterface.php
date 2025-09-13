@@ -15,7 +15,7 @@ class UserInterface
 
     /**
      * Display script header
-     * 
+     *
      * @return void
      */
     public function displayHeader(): void
@@ -31,7 +31,7 @@ class UserInterface
 
     /**
      * Display AWS connection status
-     * 
+     *
      * @param string $credentialSource
      * @return void
      */
@@ -43,7 +43,7 @@ class UserInterface
 
     /**
      * Display connection success
-     * 
+     *
      * @return void
      */
     public function displayConnectionSuccess(): void
@@ -53,7 +53,7 @@ class UserInterface
 
     /**
      * Get user confirmation for deletion
-     * 
+     *
      * @param int $domainCount
      * @param array $config
      * @return bool
@@ -65,11 +65,11 @@ class UserInterface
         $permanentlyDeleteDomains = $config['permanently_delete_domains'] ?? false;
 
         echo "⚠️  WARNING: This will process {$domainCount} domains:\n";
-        
+
         if ($deleteHostedZones) {
             echo "   🗂️  - Delete hosted zones from AWS Route 53\n";
         }
-        
+
         if ($deleteDomainRegistrations) {
             if ($permanentlyDeleteDomains) {
                 echo "   🌐 - PERMANENTLY DELETE domain registrations (IRREVERSIBLE!)\n";
@@ -80,23 +80,23 @@ class UserInterface
                 echo "   ⚠️  - You will need to manually transfer domains out to fully delete them\n";
             }
         }
-        
+
         if ($this->isForced || $this->isDryRun) {
             return true;
         }
-        
+
         echo "\nThis action cannot be undone. Are you sure you want to continue? (yes/no): ";
-        
+
         $handle = fopen("php://stdin", "r");
         $line = fgets($handle);
         fclose($handle);
-        
+
         return trim(strtolower($line)) === 'yes';
     }
 
     /**
      * Display cancellation message
-     * 
+     *
      * @return void
      */
     public function displayCancellation(): void
@@ -106,7 +106,7 @@ class UserInterface
 
     /**
      * Display execution summary
-     * 
+     *
      * @param array $results
      * @param int $totalDomains
      * @return void
@@ -118,7 +118,7 @@ class UserInterface
             'failed' => 0,
             'skipped' => 0
         ];
-        
+
         $domainRegistrationStats = [
             'successful' => 0,
             'failed' => 0,
@@ -180,15 +180,16 @@ class UserInterface
         foreach ($results as $domainResult) {
             $hostedZoneResult = $domainResult['hosted_zone_result'];
             $domainRegistrationResult = $domainResult['domain_registration_result'];
-            
-            if (($hostedZoneResult && !$hostedZoneResult['success'] && !$hostedZoneResult['skipped']) ||
-                ($domainRegistrationResult && !$domainRegistrationResult['success'] && !$domainRegistrationResult['skipped'])) {
-                
+
+            if (
+                ($hostedZoneResult && !$hostedZoneResult['success'] && !$hostedZoneResult['skipped']) ||
+                ($domainRegistrationResult && !$domainRegistrationResult['success'] && !$domainRegistrationResult['skipped'])
+            ) {
                 if (!$hasFailures) {
                     echo "\n❌ Failed domains:\n";
                     $hasFailures = true;
                 }
-                
+
                 echo "  - {$domainResult['domain']}:\n";
                 if ($hostedZoneResult && !$hostedZoneResult['success'] && !$hostedZoneResult['skipped']) {
                     echo "    🗂️  Hosted Zone: {$hostedZoneResult['message']}\n";
@@ -204,7 +205,7 @@ class UserInterface
 
     /**
      * Parse command line arguments
-     * 
+     *
      * @param array $argv
      * @return array
      */
@@ -219,7 +220,7 @@ class UserInterface
 
     /**
      * Display help message
-     * 
+     *
      * @return void
      */
     public static function displayHelp(): void

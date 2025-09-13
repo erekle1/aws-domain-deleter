@@ -16,7 +16,7 @@ class CredentialsManager
 
     /**
      * Get AWS credentials with proper fallback and session token support
-     * 
+     *
      * @return array|null
      * @throws CredentialsException
      */
@@ -24,7 +24,7 @@ class CredentialsManager
     {
         // Config file now handles environment variables directly
         // Priority: Environment Variables > Config File > AWS Profiles > Instance Profile
-        
+
         $accessKey = $this->config['aws_access_key_id'] ?? null;
         $secretKey = $this->config['aws_secret_access_key'] ?? null;
         $sessionToken = $this->config['aws_session_token'] ?? null;
@@ -56,7 +56,7 @@ class CredentialsManager
 
     /**
      * Validate that credentials are properly configured
-     * 
+     *
      * @return bool
      */
     public function validateCredentials(): bool
@@ -71,7 +71,7 @@ class CredentialsManager
 
     /**
      * Get credential source description for logging
-     * 
+     *
      * @return string
      */
     public function getCredentialSource(): string

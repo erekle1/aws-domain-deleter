@@ -137,12 +137,12 @@ class Route53DomainsServiceTest extends BaseTestCase
         $mockResult->shouldReceive('get')
                    ->with('OperationId')
                    ->andReturn('op-123456789');
-        
+
         // Mock array access for $result['OperationId']
         $mockResult->shouldReceive('offsetExists')
                    ->with('OperationId')
                    ->andReturn(true);
-        
+
         $mockResult->shouldReceive('offsetGet')
                    ->with('OperationId')
                    ->andReturn('op-123456789');
@@ -270,12 +270,12 @@ class Route53DomainsServiceTest extends BaseTestCase
         $deleteResult->shouldReceive('get')
                      ->with('OperationId')
                      ->andReturn('op-123456789');
-        
+
         // Mock array access for $result['OperationId']
         $deleteResult->shouldReceive('offsetExists')
                      ->with('OperationId')
                      ->andReturn(true);
-        
+
         $deleteResult->shouldReceive('offsetGet')
                      ->with('OperationId')
                      ->andReturn('op-123456789');

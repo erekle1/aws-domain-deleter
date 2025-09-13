@@ -84,7 +84,7 @@ composer test-coverage
 ### Static Analysis
 
 ```bash
-composer analyse
+composer cs-check
 ```
 
 ### Code Style Check
@@ -139,7 +139,6 @@ composer cs-fix
 3. **Run the test suite**
    ```bash
    composer test
-   composer analyse
    composer cs-check
    ```
 

@@ -54,12 +54,12 @@ class ApplicationTest extends BaseTestCase
     public function testRunWithEmptyDomainFile(): void
     {
         $config = $this->getTestConfig();
-        
+
         // Create an empty CSV file
         $emptyFile = tempnam(sys_get_temp_dir(), 'empty_domains');
         file_put_contents($emptyFile, '');
         $config['csv_file_path'] = $emptyFile;
-        
+
         $app = new Application($config, $this->testOptions);
 
         $this->expectOutputRegex('/Fatal error:/');
@@ -77,7 +77,7 @@ class ApplicationTest extends BaseTestCase
     {
         $config = $this->getTestConfig();
         $config['csv_file_path'] = '/non/existent/file.csv';
-        
+
         $app = new Application($config, $this->testOptions);
 
         $this->expectOutputRegex('/Fatal error:/');
@@ -92,7 +92,7 @@ class ApplicationTest extends BaseTestCase
     {
         $config = $this->getTestConfig();
         $options = array_merge($this->testOptions, ['dry_run' => true]);
-        
+
         $app = new Application($config, $options);
 
         $this->expectOutputRegex('/DRY RUN MODE/');
@@ -108,7 +108,7 @@ class ApplicationTest extends BaseTestCase
     {
         $config = $this->getTestConfig();
         $options = array_merge($this->testOptions, ['force' => true]);
-        
+
         $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Testing AWS connection/');
@@ -125,7 +125,7 @@ class ApplicationTest extends BaseTestCase
         $config['delete_hosted_zones'] = false;
         $config['delete_domain_registrations'] = true;
         $config['permanently_delete_domains'] = true;
-        
+
         $app = new Application($config, $this->testOptions);
 
         // Test that the application is created without errors
@@ -137,7 +137,7 @@ class ApplicationTest extends BaseTestCase
         // Create invalid config to trigger exception (non-existent csv file)
         $config = $this->getTestConfig();
         $config['csv_file_path'] = '/nonexistent/path/that/will/cause/error.csv';
-        
+
         $app = new Application($config, $this->testOptions);
 
         $this->expectOutputRegex('/Fatal error:/');
@@ -153,7 +153,7 @@ class ApplicationTest extends BaseTestCase
         // Reset credentials to invalid values
         $config['aws_access_key_id'] = 'invalid';
         $config['aws_secret_access_key'] = 'invalid';
-        
+
         $app = new Application($config, $this->testOptions);
 
         $this->expectOutputRegex('/Testing AWS connection/');

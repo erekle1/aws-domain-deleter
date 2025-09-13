@@ -42,7 +42,7 @@ class DomainManagerTest extends BaseTestCase
     {
         $emptyFile = tempnam(sys_get_temp_dir(), 'empty_domains');
         file_put_contents($emptyFile, '');
-        
+
         $domainManager = new DomainManager($emptyFile);
 
         $this->expectException(\Exception::class);
@@ -59,7 +59,7 @@ class DomainManagerTest extends BaseTestCase
     {
         $duplicateFile = tempnam(sys_get_temp_dir(), 'duplicate_domains');
         file_put_contents($duplicateFile, "example.com\ntest.com\nexample.com\n");
-        
+
         $domainManager = new DomainManager($duplicateFile);
         $domains = $domainManager->loadDomains();
 
@@ -74,7 +74,7 @@ class DomainManagerTest extends BaseTestCase
     {
         $fileWithEmptyLines = tempnam(sys_get_temp_dir(), 'domains_with_empty_lines');
         file_put_contents($fileWithEmptyLines, "example.com\n\ntest.com\n   \n");
-        
+
         $domainManager = new DomainManager($fileWithEmptyLines);
         $domains = $domainManager->loadDomains();
 
@@ -132,7 +132,7 @@ class DomainManagerTest extends BaseTestCase
     {
         $fileWithWhitespace = tempnam(sys_get_temp_dir(), 'domains_with_whitespace');
         file_put_contents($fileWithWhitespace, "  example.com  \n\t test.com \t\n");
-        
+
         $domainManager = new DomainManager($fileWithWhitespace);
         $domains = $domainManager->loadDomains();
 

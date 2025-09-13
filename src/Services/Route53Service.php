@@ -18,7 +18,7 @@ class Route53Service
 
     /**
      * Find hosted zone for a domain
-     * 
+     *
      * @param string $domain
      * @return array|null
      */
@@ -46,7 +46,7 @@ class Route53Service
 
     /**
      * Delete all non-essential records from a hosted zone
-     * 
+     *
      * @param string $hostedZoneId
      * @return array Statistics about deleted records
      */
@@ -93,7 +93,7 @@ class Route53Service
 
     /**
      * Delete a hosted zone
-     * 
+     *
      * @param string $hostedZoneId
      * @return bool
      */
@@ -112,7 +112,7 @@ class Route53Service
 
     /**
      * Process a single domain deletion
-     * 
+     *
      * @param string $domain
      * @return array Result of the operation
      */
@@ -123,7 +123,7 @@ class Route53Service
 
             // Find hosted zone
             $hostedZone = $this->findHostedZone($domain);
-            
+
             if (!$hostedZone) {
                 echo "-> Hosted Zone for '{$domain}' not found. Skipping.\n";
                 return [
@@ -149,7 +149,7 @@ class Route53Service
 
             // Delete records first
             $recordsResult = $this->deleteRecords($hostedZone['id']);
-            
+
             if ($recordsResult['deleted_count'] > 0) {
                 echo "--> Deleted {$recordsResult['deleted_count']} DNS records\n";
                 foreach ($recordsResult['records'] as $record) {
@@ -172,10 +172,9 @@ class Route53Service
                 'deleted_records' => $recordsResult['deleted_count'],
                 'message' => 'Successfully deleted'
             ];
-
         } catch (AwsException $e) {
             echo "❌ Error deleting '{$domain}': " . $e->getMessage() . "\n\n";
-            
+
             return [
                 'success' => false,
                 'skipped' => false,

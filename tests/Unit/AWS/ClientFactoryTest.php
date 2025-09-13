@@ -37,7 +37,7 @@ class ClientFactoryTest extends BaseTestCase
     {
         // Route53Domains must use us-east-1
         $client = $this->clientFactory->createRoute53DomainsClient();
-        
+
         $this->assertInstanceOf(Route53DomainsClient::class, $client);
         // We can't easily test the region without accessing private properties
         // but we can verify the client was created successfully
@@ -78,9 +78,9 @@ class ClientFactoryTest extends BaseTestCase
     {
         $config = $this->getTestConfig();
         $config['use_instance_profile'] = true;
-        
+
         $clientFactory = new ClientFactory($config);
-        
+
         $route53Client = $clientFactory->createRoute53Client();
         $domainsClient = $clientFactory->createRoute53DomainsClient();
 
@@ -92,9 +92,9 @@ class ClientFactoryTest extends BaseTestCase
     {
         $config = $this->getTestConfig();
         $config['credential_provider_timeout'] = 5;
-        
+
         $clientFactory = new ClientFactory($config);
-        
+
         $route53Client = $clientFactory->createRoute53Client();
         $domainsClient = $clientFactory->createRoute53DomainsClient();
 

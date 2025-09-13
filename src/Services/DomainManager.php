@@ -13,7 +13,7 @@ class DomainManager
 
     /**
      * Load domains from CSV file
-     * 
+     *
      * @return array
      * @throws \Exception
      */
@@ -36,7 +36,7 @@ class DomainManager
 
     /**
      * Validate domain format
-     * 
+     *
      * @param string $domain
      * @return bool
      */
@@ -44,23 +44,23 @@ class DomainManager
     {
         // Basic domain validation using regex
         $pattern = '/^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/';
-        
+
         // Check if domain matches pattern and is not too long
         if (!preg_match($pattern, $domain) || strlen($domain) > 253) {
             return false;
         }
-        
+
         // Additional checks for invalid domains
         if (strpos($domain, ' ') !== false || $domain === '') {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Filter and validate domains
-     * 
+     *
      * @param array $domains
      * @return array
      */
@@ -90,7 +90,7 @@ class DomainManager
 
     /**
      * Display domains list
-     * 
+     *
      * @param array $domains
      * @return void
      */

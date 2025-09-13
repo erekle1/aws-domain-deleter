@@ -28,7 +28,7 @@ class Application
 
     /**
      * Run the application
-     * 
+     *
      * @return int Exit code
      */
     public function run(): int
@@ -62,7 +62,6 @@ class Application
             $this->ui->displaySummary($results, count($domains));
 
             return 0;
-
         } catch (\Exception $e) {
             echo "❌ Fatal error: " . $e->getMessage() . "\n";
             return 1;
@@ -71,7 +70,7 @@ class Application
 
     /**
      * Test AWS connection
-     * 
+     *
      * @throws AwsException
      */
     private function testAwsConnection(): void
@@ -88,7 +87,7 @@ class Application
 
     /**
      * Load and validate domains
-     * 
+     *
      * @return array
      * @throws \Exception
      */
@@ -96,19 +95,19 @@ class Application
     {
         $allDomains = $this->domainManager->loadDomains();
         $validDomains = $this->domainManager->validateDomains($allDomains);
-        
+
         if (empty($validDomains)) {
             throw new \Exception("No valid domains found to process");
         }
 
         $this->domainManager->displayDomains($validDomains);
-        
+
         return $validDomains;
     }
 
     /**
      * Get user confirmation
-     * 
+     *
      * @param array $domains
      * @return bool
      */
@@ -119,23 +118,23 @@ class Application
 
     /**
      * Process all domains
-     * 
+     *
      * @param array $domains
      * @return array
      */
     private function processDomains(array $domains): array
     {
         $results = [];
-        
+
         // Create services based on configuration
         $route53Service = null;
         $domainsService = null;
-        
+
         if ($this->config['delete_hosted_zones'] ?? true) {
             $route53Client = $this->clientFactory->createRoute53Client();
             $route53Service = new Route53Service($route53Client, $this->options['dry_run']);
         }
-        
+
         if ($this->config['delete_domain_registrations'] ?? false) {
             $domainsClient = $this->clientFactory->createRoute53DomainsClient();
             $permanentlyDeleteDomains = $this->config['permanently_delete_domains'] ?? false;

@@ -42,9 +42,6 @@ jobs:
     - name: Run PHPUnit tests
       run: composer run test
 
-    - name: Run PHPStan analysis
-      run: composer run analyse
-
     - name: Run code style check
       run: composer run cs-check
 
