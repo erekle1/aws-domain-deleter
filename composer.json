@@ -1,0 +1,52 @@
+{
+    "name": "erekle1/aws-domain-deleter",
+    "description": "AWS Route 53 hosted zone and domain registration batch deletion tool",
+    "type": "project",
+    "license": "MIT",
+    "keywords": ["aws", "route53", "domain", "deletion", "dns", "automation"],
+    "authors": [
+        {
+            "name": "Erekle Kereselidze",
+            "email": "erekle.kereselidze@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "aws/aws-sdk-php": "^3.300",
+        "symfony/var-dumper": "^7.0",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^10.5",
+        "squizlabs/php_codesniffer": "^3.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage",
+        "analyse": "phpstan analyse src tests --level=8",
+        "cs-check": "phpcs src tests --standard=PSR12",
+        "cs-fix": "phpcbf src tests --standard=PSR12",
+        "post-install-cmd": [
+            "echo 'Dependencies installed successfully. Please configure your AWS credentials.'"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    }
+}

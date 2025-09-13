@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+         testdox="true">
+    
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <directory>src/Config</directory>
+        </exclude>
+    </source>
+
+    <coverage>
+        <report>
+            <html outputDirectory="coverage" lowUpperBound="50" highLowerBound="80"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>
+        </report>
+    </coverage>
+
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="AWS_ACCESS_KEY_ID" value="test-key"/>
+        <env name="AWS_SECRET_ACCESS_KEY" value="test-secret"/>
+        <env name="AWS_SESSION_TOKEN" value="test-token"/>
+        <env name="AWS_DEFAULT_REGION" value="eu-central-1"/>
+        <env name="DELETE_HOSTED_ZONES" value="true"/>
+        <env name="DELETE_DOMAIN_REGISTRATIONS" value="false"/>
+        <env name="PERMANENTLY_DELETE_DOMAINS" value="false"/>
+    </php>
+</phpunit>
