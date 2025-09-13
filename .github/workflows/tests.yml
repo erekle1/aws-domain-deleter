@@ -39,6 +39,14 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Create test config file
+      run: |
+        mkdir -p config
+        cp env.example config/aws_config.php
+        sed -i 's/YOUR_AWS_ACCESS_KEY_ID/test-key/g' config/aws_config.php
+        sed -i 's/YOUR_AWS_SECRET_ACCESS_KEY/test-secret/g' config/aws_config.php
+        sed -i 's/YOUR_AWS_SESSION_TOKEN/test-token/g' config/aws_config.php
+
     - name: Run PHPUnit tests
       run: composer run test
 
@@ -70,6 +78,14 @@ jobs:
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
+
+    - name: Create test config file
+      run: |
+        mkdir -p config
+        cp env.example config/aws_config.php
+        sed -i 's/YOUR_AWS_ACCESS_KEY_ID/test-key/g' config/aws_config.php
+        sed -i 's/YOUR_AWS_SECRET_ACCESS_KEY/test-secret/g' config/aws_config.php
+        sed -i 's/YOUR_AWS_SESSION_TOKEN/test-token/g' config/aws_config.php
 
     - name: Run security audit
       run: composer audit
