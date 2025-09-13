@@ -28,7 +28,7 @@ This project follows a standard code of conduct. Please be respectful and profes
 
 ### Prerequisites
 
-- PHP 8.0 or higher
+- PHP 8.3 or higher
 - Composer
 - Git
 

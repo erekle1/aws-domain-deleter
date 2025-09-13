@@ -24,7 +24,7 @@ This script will **permanently delete hosted zones** from AWS Route 53. This act
 
 ## Prerequisites
 
-1. **PHP 8.0+** with Composer
+1. **PHP 8.3+** with Composer
 2. **AWS credentials** with Route 53 permissions (including session token support)
 3. **Domains list** in CSV format
 
