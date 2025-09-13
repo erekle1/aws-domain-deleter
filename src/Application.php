@@ -43,11 +43,11 @@ class Application
                 return 0;
             }
 
+            // Load and validate domains first (before AWS connection)
+            $domains = $this->loadDomains();
+
             // Test AWS connection
             $this->testAwsConnection();
-
-            // Load and validate domains
-            $domains = $this->loadDomains();
 
             // Get user confirmation
             if (!$this->getUserConfirmation($domains)) {

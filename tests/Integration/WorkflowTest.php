@@ -138,8 +138,9 @@ return [
 
         // Create a test script that uses the temp config
         $testScript = tempnam(sys_get_temp_dir(), 'test_script');
+        $projectRoot = realpath(__DIR__ . '/../../');
         file_put_contents($testScript, "<?php
-require __DIR__ . '/../../vendor/autoload.php';
+require '{$projectRoot}/vendor/autoload.php';
 use App\\Application;
 use App\\Services\\UserInterface;
 

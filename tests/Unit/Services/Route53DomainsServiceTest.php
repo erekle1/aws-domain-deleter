@@ -61,9 +61,11 @@ class Route53DomainsServiceTest extends BaseTestCase
 
     public function testGetDomainInfoReturnsNullForNonExistentDomain(): void
     {
-        $awsException = Mockery::mock(AwsException::class);
-        $awsException->shouldReceive('getMessage')
-                     ->andReturn('DomainNotFound');
+        $awsException = new AwsException(
+            'DomainNotFound',
+            Mockery::mock(\Aws\CommandInterface::class),
+            ['code' => 'InvalidParameterValue']
+        );
 
         $this->mockClient->shouldReceive('getDomainDetail')
                          ->andThrow($awsException);
@@ -133,6 +135,15 @@ class Route53DomainsServiceTest extends BaseTestCase
     {
         $mockResult = Mockery::mock(Result::class);
         $mockResult->shouldReceive('get')
+                   ->with('OperationId')
+                   ->andReturn('op-123456789');
+        
+        // Mock array access for $result['OperationId']
+        $mockResult->shouldReceive('offsetExists')
+                   ->with('OperationId')
+                   ->andReturn(true);
+        
+        $mockResult->shouldReceive('offsetGet')
                    ->with('OperationId')
                    ->andReturn('op-123456789');
 
@@ -259,6 +270,15 @@ class Route53DomainsServiceTest extends BaseTestCase
         $deleteResult->shouldReceive('get')
                      ->with('OperationId')
                      ->andReturn('op-123456789');
+        
+        // Mock array access for $result['OperationId']
+        $deleteResult->shouldReceive('offsetExists')
+                     ->with('OperationId')
+                     ->andReturn(true);
+        
+        $deleteResult->shouldReceive('offsetGet')
+                     ->with('OperationId')
+                     ->andReturn('op-123456789');
 
         $this->mockClient->shouldReceive('deleteDomain')
                          ->andReturn($deleteResult);
@@ -273,9 +293,11 @@ class Route53DomainsServiceTest extends BaseTestCase
 
     public function testProcessDomainRegistrationWithNonExistentDomain(): void
     {
-        $awsException = Mockery::mock(AwsException::class);
-        $awsException->shouldReceive('getMessage')
-                     ->andReturn('DomainNotFound');
+        $awsException = new AwsException(
+            'DomainNotFound',
+            Mockery::mock(\Aws\CommandInterface::class),
+            ['code' => 'InvalidParameterValue']
+        );
 
         $this->mockClient->shouldReceive('getDomainDetail')
                          ->andThrow($awsException);
@@ -284,7 +306,7 @@ class Route53DomainsServiceTest extends BaseTestCase
 
         $result = $this->service->processDomainRegistration('nonexistent.com');
 
-        $this->assertFalse($result['success']);
+        $this->assertFalse($result['success']); // The method returns success=false for non-existent domains
         $this->assertTrue($result['skipped']);
     }
 

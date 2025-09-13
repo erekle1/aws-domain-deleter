@@ -60,10 +60,6 @@ class UserInterface
      */
     public function getUserConfirmation(int $domainCount, array $config = []): bool
     {
-        if ($this->isForced || $this->isDryRun) {
-            return true;
-        }
-
         $deleteHostedZones = $config['delete_hosted_zones'] ?? true;
         $deleteDomainRegistrations = $config['delete_domain_registrations'] ?? false;
         $permanentlyDeleteDomains = $config['permanently_delete_domains'] ?? false;
@@ -83,6 +79,10 @@ class UserInterface
                 echo "   🌐 - Process domain registrations (disable auto-renewal)\n";
                 echo "   ⚠️  - You will need to manually transfer domains out to fully delete them\n";
             }
+        }
+        
+        if ($this->isForced || $this->isDryRun) {
+            return true;
         }
         
         echo "\nThis action cannot be undone. Are you sure you want to continue? (yes/no): ";

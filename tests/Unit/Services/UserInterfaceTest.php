@@ -198,7 +198,7 @@ class UserInterfaceTest extends BaseTestCase
 
     public function testGetUserConfirmationWithPermanentDeletion(): void
     {
-        $ui = new UserInterface(true, false); // Use dry-run to avoid prompting
+        $ui = new UserInterface(false, true); // Use force mode to show messages but auto-confirm
         $config = $this->getTestConfig();
         $config['delete_domain_registrations'] = true;
         $config['permanently_delete_domains'] = true;
@@ -212,7 +212,7 @@ class UserInterfaceTest extends BaseTestCase
 
     public function testGetUserConfirmationWithoutPermanentDeletion(): void
     {
-        $ui = new UserInterface(true, false); // Use dry-run to avoid prompting
+        $ui = new UserInterface(false, true); // Use force mode to show messages but auto-confirm
         $config = $this->getTestConfig();
         $config['delete_domain_registrations'] = true;
         $config['permanently_delete_domains'] = false;

@@ -48,9 +48,10 @@ class ClientFactoryTest extends BaseTestCase
         $config = $this->getConfigWithoutEnvVars();
         $clientFactory = new ClientFactory($config);
 
-        $client = $clientFactory->createRoute53Client();
+        $this->expectException(\Aws\Exception\CredentialsException::class);
+        $this->expectExceptionMessage('No valid AWS credentials found');
 
-        $this->assertInstanceOf(Route53Client::class, $client);
+        $clientFactory->createRoute53Client();
     }
 
     public function testGetCredentialSourceDelegatesToCredentialsManager(): void

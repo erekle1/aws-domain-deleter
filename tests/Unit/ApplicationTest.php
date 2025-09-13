@@ -134,8 +134,9 @@ class ApplicationTest extends BaseTestCase
 
     public function testApplicationHandlesException(): void
     {
-        // Create invalid config to trigger exception
-        $config = [];
+        // Create invalid config to trigger exception (non-existent csv file)
+        $config = $this->getTestConfig();
+        $config['csv_file_path'] = '/nonexistent/path/that/will/cause/error.csv';
         
         $app = new Application($config, $this->testOptions);
 

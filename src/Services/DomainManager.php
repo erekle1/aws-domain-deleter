@@ -42,7 +42,20 @@ class DomainManager
      */
     public function validateDomain(string $domain): bool
     {
-        return filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) !== false;
+        // Basic domain validation using regex
+        $pattern = '/^(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/';
+        
+        // Check if domain matches pattern and is not too long
+        if (!preg_match($pattern, $domain) || strlen($domain) > 253) {
+            return false;
+        }
+        
+        // Additional checks for invalid domains
+        if (strpos($domain, ' ') !== false || $domain === '') {
+            return false;
+        }
+        
+        return true;
     }
 
     /**

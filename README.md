@@ -281,7 +281,7 @@ If you encounter issues:
 
 **Erekle Kereselidze**
 - GitHub: [@erekle1](https://github.com/erekle1)
-- Email: erekle.kereselidze@gmail.com
+- Email: erekle.kereselidze2@gmail.com
 
 ## Contributing
 
