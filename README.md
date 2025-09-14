@@ -241,7 +241,7 @@ php aws-domain-manager.php --update-contacts --admin-contact --registrant-contac
 ```bash
 php aws-domain-manager.php --update-contacts --admin-contact --force
 ```
-```
+
 ⚠️ **Use with extreme caution!** Skips confirmation prompt.
 
 ## Command Line Options
