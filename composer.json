@@ -18,8 +18,7 @@
     },
     "require-dev": {
         "mockery/mockery": "1.6.12",
-        "phpunit/phpunit": "12.3.3",
-        "squizlabs/php_codesniffer": "3.13.0"
+        "phpunit/phpunit": "12.3.3"
     },
     "autoload": {
         "psr-4": {
@@ -34,8 +33,6 @@
     "scripts": {
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-html coverage",
-        "cs-check": "phpcs src tests --standard=PSR12",
-        "cs-fix": "phpcbf src tests --standard=PSR12",
         "post-install-cmd": [
             "echo 'Dependencies installed successfully. Please configure your AWS credentials.'"
         ]

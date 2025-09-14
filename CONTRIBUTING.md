@@ -81,22 +81,10 @@ composer test
 composer test-coverage
 ```
 
-### Static Analysis
+### Code Coverage
 
 ```bash
-composer cs-check
-```
-
-### Code Style Check
-
-```bash
-composer cs-check
-```
-
-### Code Style Fix
-
-```bash
-composer cs-fix
+composer test-coverage
 ```
 
 ## Coding Standards
@@ -139,7 +127,6 @@ composer cs-fix
 3. **Run the test suite**
    ```bash
    composer test
-   composer cs-check
    ```
 
 4. **Commit your changes**

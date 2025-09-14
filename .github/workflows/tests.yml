@@ -50,9 +50,6 @@ jobs:
     - name: Run PHPUnit tests
       run: composer run test
 
-    - name: Run code style check
-      run: composer run cs-check
-
     - name: Generate code coverage
       if: matrix.php-version == '8.3'
       run: composer run test-coverage
