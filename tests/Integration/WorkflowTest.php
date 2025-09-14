@@ -100,7 +100,7 @@ class WorkflowTest extends TestCase
         $configTestScript = __DIR__ . '/../../test_config.php';
         file_put_contents($configTestScript, "<?php
 require 'vendor/autoload.php';
-\$configPath = __DIR__ . '/../src/config/aws_config.php';
+\$configPath = __DIR__ . '/src/config/aws_config.php';
 if (file_exists(\$configPath)) {
     \$config = require \$configPath;
 } else {
@@ -163,7 +163,7 @@ use App\\Application;
 use App\\Services\\UserInterface;
 
 \$config = require '{$tempConfig}';
-\$options = ['dry_run' => true, 'force' => false, 'help' => false];
+\$options = ['dry_run' => true, 'force' => false, 'help' => false, 'delete_domains' => true, 'update_contacts' => false, 'admin_contact' => false, 'registrant_contact' => false, 'tech_contact' => false];
 \$app = new Application(\$config, \$options);
 exit(\$app->run());
 ");
