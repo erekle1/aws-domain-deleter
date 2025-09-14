@@ -326,4 +326,40 @@ class ContactUpdateServiceTest extends TestCase
         $this->assertStringContainsString('DRY RUN', $output);
         $this->assertStringContainsString('no actual changes were made', $output);
     }
+
+    public function testLoadDomainsFromCsvWithEscapeCharacters(): void
+    {
+        // Create CSV content with escape characters and special characters
+        $csvContent = "domain_name,update_admin,update_registrant,update_tech\n";
+        $csvContent .= "\"test\"domain.com\",true,false,true\n"; // Domain with quotes
+        $csvContent .= "test,domain.com,false,true,false\n"; // Domain with comma
+        $csvContent .= "test\\domain.com,true,true,false\n"; // Domain with backslash
+        
+        file_put_contents($this->csvFilePath, $csvContent);
+
+        $service = new ContactUpdateService($this->mockRoute53DomainsClient, $this->contactInfo, $this->csvFilePath);
+        $domains = $service->loadDomainsFromCsv();
+
+        $this->assertCount(3, $domains);
+        
+        // Test first domain with quotes
+        $this->assertEquals('test"domain.com', $domains[0]['domain_name']);
+        $this->assertTrue($domains[0]['update_admin']);
+        $this->assertFalse($domains[0]['update_registrant']);
+        $this->assertTrue($domains[0]['update_tech']);
+        
+        // Test second domain with comma
+        $this->assertEquals('test,domain.com', $domains[1]['domain_name']);
+        $this->assertFalse($domains[1]['update_admin']);
+        $this->assertTrue($domains[1]['update_registrant']);
+        $this->assertFalse($domains[1]['update_tech']);
+        
+        // Test third domain with backslash
+        $this->assertEquals('test\\domain.com', $domains[2]['domain_name']);
+        $this->assertTrue($domains[2]['update_admin']);
+        $this->assertTrue($domains[2]['update_registrant']);
+        $this->assertFalse($domains[2]['update_tech']);
+
+        unlink($this->csvFilePath);
+    }
 }

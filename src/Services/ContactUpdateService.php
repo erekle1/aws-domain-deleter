@@ -37,9 +37,9 @@ class ContactUpdateService
         }
 
         // Skip header row
-        $header = fgetcsv($handle);
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
         
-        while (($row = fgetcsv($handle)) !== false) {
+        while (($row = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
             if (count($row) >= 4) {
                 $domains[] = [
                     'domain_name' => trim($row[0]),
