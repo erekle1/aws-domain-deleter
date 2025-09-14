@@ -29,57 +29,99 @@ class WorkflowTest extends TestCase
 
     public function testScriptFailsWithoutCredentials(): void
     {
-        // Ensure no AWS env vars are set for this test
-        $env = [
-            'AWS_ACCESS_KEY_ID' => '',
-            'AWS_SECRET_ACCESS_KEY' => '',
-            'AWS_SESSION_TOKEN' => ''
-        ];
+        // Create a temporary domains.csv file for testing
+        $testDomainsFile = __DIR__ . '/../Fixtures/test-domains.csv';
+        $tempDomainsFile = dirname(__DIR__, 2) . '/domains.csv';
+        
+        // Copy test domains file to project root
+        copy($testDomainsFile, $tempDomainsFile);
+        
+        try {
+            // Ensure no AWS env vars are set for this test
+            $env = [
+                'AWS_ACCESS_KEY_ID' => '',
+                'AWS_SECRET_ACCESS_KEY' => '',
+                'AWS_SESSION_TOKEN' => ''
+            ];
 
-        $envString = '';
-        foreach ($env as $key => $value) {
-            $envString .= "{$key}='{$value}' ";
+            $envString = '';
+            foreach ($env as $key => $value) {
+                $envString .= "{$key}='{$value}' ";
+            }
+
+            $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
+
+            $this->assertStringContainsString('No valid AWS credentials found', $output);
+        } finally {
+            // Clean up temporary file
+            if (file_exists($tempDomainsFile)) {
+                unlink($tempDomainsFile);
+            }
         }
-
-        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
-
-        $this->assertStringContainsString('No valid AWS credentials found', $output);
     }
 
     public function testScriptWithDryRunShowsCorrectMode(): void
     {
-        $env = [
-            'AWS_ACCESS_KEY_ID' => 'test-key',
-            'AWS_SECRET_ACCESS_KEY' => 'test-secret'
-        ];
+        // Create a temporary domains.csv file for testing
+        $testDomainsFile = __DIR__ . '/../Fixtures/test-domains.csv';
+        $tempDomainsFile = dirname(__DIR__, 2) . '/domains.csv';
+        
+        // Copy test domains file to project root
+        copy($testDomainsFile, $tempDomainsFile);
+        
+        try {
+            $env = [
+                'AWS_ACCESS_KEY_ID' => 'test-key',
+                'AWS_SECRET_ACCESS_KEY' => 'test-secret'
+            ];
 
-        $envString = '';
-        foreach ($env as $key => $value) {
-            $envString .= "{$key}='{$value}' ";
+            $envString = '';
+            foreach ($env as $key => $value) {
+                $envString .= "{$key}='{$value}' ";
+            }
+
+            $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
+
+            $this->assertStringContainsString('DRY RUN MODE', $output);
+            $this->assertStringContainsString('No actual deletions will be performed', $output);
+        } finally {
+            // Clean up temporary file
+            if (file_exists($tempDomainsFile)) {
+                unlink($tempDomainsFile);
+            }
         }
-
-        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
-
-        $this->assertStringContainsString('DRY RUN MODE', $output);
-        $this->assertStringContainsString('No actual deletions will be performed', $output);
     }
 
     public function testScriptReadsDomainsFromCSV(): void
     {
-        $env = [
-            'AWS_ACCESS_KEY_ID' => 'test-key',
-            'AWS_SECRET_ACCESS_KEY' => 'test-secret'
-        ];
+        // Create a temporary domains.csv file for testing
+        $testDomainsFile = __DIR__ . '/../Fixtures/test-domains.csv';
+        $tempDomainsFile = dirname(__DIR__, 2) . '/domains.csv';
+        
+        // Copy test domains file to project root
+        copy($testDomainsFile, $tempDomainsFile);
+        
+        try {
+            $env = [
+                'AWS_ACCESS_KEY_ID' => 'test-key',
+                'AWS_SECRET_ACCESS_KEY' => 'test-secret'
+            ];
 
-        $envString = '';
-        foreach ($env as $key => $value) {
-            $envString .= "{$key}='{$value}' ";
+            $envString = '';
+            foreach ($env as $key => $value) {
+                $envString .= "{$key}='{$value}' ";
+            }
+
+            $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
+
+            $this->assertStringContainsString('Found', $output);
+            $this->assertStringContainsString('domains to process', $output);
+        } finally {
+            // Clean up temporary file
+            if (file_exists($tempDomainsFile)) {
+                unlink($tempDomainsFile);
+            }
         }
-
-        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
-
-        $this->assertStringContainsString('Found', $output);
-        $this->assertStringContainsString('domains to process', $output);
     }
 
     public function testConfigFileEnvironmentVariablePrecedence(): void

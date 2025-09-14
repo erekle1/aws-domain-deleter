@@ -12,6 +12,7 @@ composer.lock
 config/aws_config.php
 failed_domains.txt
 domains.csv
+contacts.json
 
 # Logs
 *.log
