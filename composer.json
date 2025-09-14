@@ -32,7 +32,6 @@
     },
     "scripts": {
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-html coverage",
         "post-install-cmd": [
             "echo 'Dependencies installed successfully. Please configure your AWS credentials.'"
         ]
