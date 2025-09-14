@@ -195,7 +195,7 @@ class ApplicationTest extends BaseTestCase
         $options = array_merge($this->testOptions, ['delete_domains' => true]);
         $app = new Application($config, $options);
 
-        $this->expectOutputRegex('/Fatal error:/');
+        $this->expectOutputRegex('/Domain deletion error:/');
 
         $exitCode = $app->run();
 
