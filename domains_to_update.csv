@@ -1,0 +1,4 @@
+domain_name,update_admin,update_registrant,update_tech
+example.com,true,true,true
+test-domain.com,false,true,false
+another-domain.org,true,false,true

@@ -215,6 +215,10 @@ class UserInterface
             'dry_run' => in_array('--dry-run', $argv),
             'force' => in_array('--force', $argv),
             'help' => in_array('--help', $argv) || in_array('-h', $argv),
+            'update_contacts' => in_array('--update-contacts', $argv),
+            'admin_contact' => in_array('--admin-contact', $argv),
+            'registrant_contact' => in_array('--registrant-contact', $argv),
+            'tech_contact' => in_array('--tech-contact', $argv),
         ];
     }
 
@@ -225,17 +229,24 @@ class UserInterface
      */
     public static function displayHelp(): void
     {
-        echo "AWS Route 53 Domain Deleter\n";
+        echo "AWS Route 53 Domain Manager\n";
         echo "===========================\n\n";
         echo "Usage: php delete.php [options]\n\n";
-        echo "Options:\n";
+        echo "Domain Deletion Options:\n";
         echo "  --dry-run    Preview actions without making changes\n";
         echo "  --force      Skip confirmation prompt (dangerous!)\n";
         echo "  --help, -h   Show this help message\n\n";
+        echo "Contact Update Options:\n";
+        echo "  --update-contacts     Update domain contact information\n";
+        echo "  --admin-contact       Update admin contact for domains\n";
+        echo "  --registrant-contact  Update registrant contact for domains\n";
+        echo "  --tech-contact        Update technical contact for domains\n\n";
         echo "Examples:\n";
-        echo "  php delete.php --dry-run     # Safe preview mode\n";
-        echo "  php delete.php               # Interactive deletion\n";
-        echo "  php delete.php --force       # Force deletion without prompt\n\n";
+        echo "  php delete.php --dry-run                    # Safe preview mode\n";
+        echo "  php delete.php                             # Interactive deletion\n";
+        echo "  php delete.php --force                      # Force deletion without prompt\n";
+        echo "  php delete.php --update-contacts --dry-run  # Preview contact updates\n";
+        echo "  php delete.php --update-contacts --admin-contact --tech-contact\n\n";
         echo "For more information, see README.md\n";
     }
 }

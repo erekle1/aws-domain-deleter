@@ -1,0 +1,50 @@
+{
+  "admin_contact": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "contactType": "PERSON",
+    "organizationName": "Example Organization",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Suite 100",
+    "city": "New York",
+    "state": "NY",
+    "countryCode": "US",
+    "zipCode": "10001",
+    "phoneNumber": "+1.5551234567",
+    "email": "admin@example.com",
+    "fax": "+1.5551234568",
+    "extraParams": []
+  },
+  "registrant_contact": {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "contactType": "PERSON",
+    "organizationName": "Example Organization",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Suite 100",
+    "city": "New York",
+    "state": "NY",
+    "countryCode": "US",
+    "zipCode": "10001",
+    "phoneNumber": "+1.5551234567",
+    "email": "registrant@example.com",
+    "fax": "+1.5551234568",
+    "extraParams": []
+  },
+  "tech_contact": {
+    "firstName": "Tech",
+    "lastName": "Support",
+    "contactType": "PERSON",
+    "organizationName": "Example Organization",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Suite 100",
+    "city": "New York",
+    "state": "NY",
+    "countryCode": "US",
+    "zipCode": "10001",
+    "phoneNumber": "+1.5551234567",
+    "email": "tech@example.com",
+    "fax": "+1.5551234568",
+    "extraParams": []
+  }
+}

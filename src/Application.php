@@ -7,6 +7,7 @@ use App\Services\Route53Service;
 use App\Services\Route53DomainsService;
 use App\Services\DomainManager;
 use App\Services\UserInterface;
+use App\Services\ContactUpdateService;
 use Aws\Exception\AwsException;
 
 class Application
@@ -41,6 +42,11 @@ class Application
             if ($this->options['help']) {
                 UserInterface::displayHelp();
                 return 0;
+            }
+
+            // Check if this is a contact update operation
+            if ($this->options['update_contacts']) {
+                return $this->runContactUpdate();
             }
 
             // Load and validate domains first (before AWS connection)
@@ -164,5 +170,112 @@ class Application
         }
 
         return $results;
+    }
+
+    /**
+     * Run contact update operation
+     *
+     * @return int Exit code
+     */
+    private function runContactUpdate(): int
+    {
+        try {
+            echo "📞 Contact Update Mode\n";
+            echo "====================\n\n";
+
+            // Load contact information
+            $contactInfo = $this->loadContactInfo();
+
+            // Test AWS connection
+            $this->testAwsConnection();
+
+            // Create contact update service
+            $domainsClient = $this->clientFactory->createRoute53DomainsClient();
+            $contactService = new ContactUpdateService($domainsClient, $contactInfo, $this->config['csv_file_path']);
+
+            // Get user confirmation for contact updates
+            if (!$this->getContactUpdateConfirmation()) {
+                $this->ui->displayCancellation();
+                return 0;
+            }
+
+            // Process contact updates
+            $results = $contactService->processDomains($this->options);
+
+            // Display summary
+            $contactService->displaySummary($results, $this->options['dry_run']);
+
+            return 0;
+        } catch (\Exception $e) {
+            echo "❌ Contact update error: " . $e->getMessage() . "\n";
+            return 1;
+        }
+    }
+
+    /**
+     * Load contact information from JSON file
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function loadContactInfo(): array
+    {
+        $contactFile = dirname(__DIR__) . '/contacts.json';
+        
+        if (!file_exists($contactFile)) {
+            throw new \Exception("Contact information file not found: contacts.json. Please create contacts.json in the project root.");
+        }
+
+        $contactData = file_get_contents($contactFile);
+        if ($contactData === false) {
+            throw new \Exception("Cannot read contact information file: contacts.json");
+        }
+
+        $contactInfo = json_decode($contactData, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception("Invalid JSON in contact information file: " . json_last_error_msg());
+        }
+
+        return $contactInfo;
+    }
+
+    /**
+     * Get user confirmation for contact updates
+     *
+     * @return bool
+     */
+    private function getContactUpdateConfirmation(): bool
+    {
+        $updateTypes = [];
+        if ($this->options['admin_contact']) {
+            $updateTypes[] = 'admin';
+        }
+        if ($this->options['registrant_contact']) {
+            $updateTypes[] = 'registrant';
+        }
+        if ($this->options['tech_contact']) {
+            $updateTypes[] = 'tech';
+        }
+
+        if (empty($updateTypes)) {
+            echo "⚠️  No contact types specified for update.\n";
+            echo "Use --admin-contact, --registrant-contact, or --tech-contact options.\n";
+            return false;
+        }
+
+        $contactList = implode(', ', $updateTypes);
+        echo "⚠️  This will update {$contactList} contact(s) for domains listed in the CSV file.\n";
+
+        if ($this->options['force'] || $this->options['dry_run']) {
+            return true;
+        }
+
+        echo "\nAre you sure you want to continue? (yes/no): ";
+
+        $handle = fopen("php://stdin", "r");
+        $line = fgets($handle);
+        fclose($handle);
+
+        return trim(strtolower($line)) === 'yes';
     }
 }
