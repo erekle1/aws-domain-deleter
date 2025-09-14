@@ -1,6 +1,6 @@
 # AWS Domain Tools
 
-A comprehensive PHP toolkit for managing AWS Route 53 domains - batch deletion and contact updates.
+⚡ Comprehensive AWS Route 53 domain management toolkit. Features batch domain deletion, contact updates, CSV input processing, dry-run mode, AWS session tokens, and permanent domain removal. Includes 100+ PHPUnit tests, CI/CD pipeline, and modern PHP 8.3+ architecture with safety features.
 
 ## ⚠️ Important Safety Warning
 
