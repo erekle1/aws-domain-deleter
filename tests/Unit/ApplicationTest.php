@@ -20,7 +20,12 @@ class ApplicationTest extends BaseTestCase
         $this->testOptions = [
             'dry_run' => false,
             'force' => false,
-            'help' => false
+            'help' => false,
+            'delete_domains' => true,
+            'update_contacts' => false,
+            'admin_contact' => false,
+            'registrant_contact' => false,
+            'tech_contact' => false
         ];
         $this->application = new Application($this->getTestConfig(), $this->testOptions);
     }
@@ -30,8 +35,8 @@ class ApplicationTest extends BaseTestCase
         $options = ['dry_run' => false, 'force' => false, 'help' => true];
         $app = new Application($this->getTestConfig(), $options);
 
-        $this->expectOutputRegex('/AWS Route 53 Domain Deleter/');
-        $this->expectOutputRegex('/Usage: php delete\.php \[options\]/');
+        $this->expectOutputRegex('/AWS Domain Manager/');
+        $this->expectOutputRegex('/Usage: php aws-domain-manager\.php \[operation\] \[options\]/');
 
         $exitCode = $app->run();
 
@@ -41,7 +46,8 @@ class ApplicationTest extends BaseTestCase
     public function testRunWithInvalidCredentials(): void
     {
         $config = $this->getConfigWithoutEnvVars();
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Fatal error:/');
         $this->expectOutputRegex('/No valid AWS credentials found/');
@@ -60,7 +66,8 @@ class ApplicationTest extends BaseTestCase
         file_put_contents($emptyFile, '');
         $config['csv_file_path'] = $emptyFile;
 
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Fatal error:/');
         $this->expectOutputRegex('/CSV file is empty/');
@@ -78,7 +85,8 @@ class ApplicationTest extends BaseTestCase
         $config = $this->getTestConfig();
         $config['csv_file_path'] = '/non/existent/file.csv';
 
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Fatal error:/');
         $this->expectOutputRegex('/CSV file.*not found/');
@@ -91,7 +99,7 @@ class ApplicationTest extends BaseTestCase
     public function testRunInDryRunMode(): void
     {
         $config = $this->getTestConfig();
-        $options = array_merge($this->testOptions, ['dry_run' => true]);
+        $options = array_merge($this->testOptions, ['dry_run' => true, 'delete_domains' => true]);
 
         $app = new Application($config, $options);
 
@@ -107,7 +115,7 @@ class ApplicationTest extends BaseTestCase
     public function testRunWithForceOption(): void
     {
         $config = $this->getTestConfig();
-        $options = array_merge($this->testOptions, ['force' => true]);
+        $options = array_merge($this->testOptions, ['force' => true, 'delete_domains' => true]);
 
         $app = new Application($config, $options);
 
@@ -126,10 +134,56 @@ class ApplicationTest extends BaseTestCase
         $config['delete_domain_registrations'] = true;
         $config['permanently_delete_domains'] = true;
 
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         // Test that the application is created without errors
         $this->assertInstanceOf(Application::class, $app);
+    }
+
+    public function testRunWithNoOperationSpecified(): void
+    {
+        $options = [
+            'dry_run' => false,
+            'force' => false,
+            'help' => false,
+            'delete_domains' => false,
+            'update_contacts' => false,
+            'admin_contact' => false,
+            'registrant_contact' => false,
+            'tech_contact' => false
+        ];
+        $app = new Application($this->getTestConfig(), $options);
+
+        $this->expectOutputRegex('/No operation specified/');
+        $this->expectOutputRegex('/AWS Domain Manager/');
+
+        $exitCode = $app->run();
+
+        $this->assertEquals(1, $exitCode);
+    }
+
+    public function testRunWithContactUpdateOperation(): void
+    {
+        $options = [
+            'dry_run' => false,
+            'force' => false,
+            'help' => false,
+            'delete_domains' => false,
+            'update_contacts' => true,
+            'admin_contact' => true,
+            'registrant_contact' => false,
+            'tech_contact' => false
+        ];
+        $app = new Application($this->getTestConfig(), $options);
+
+        $this->expectOutputRegex('/Contact Update Mode/');
+        $this->expectOutputRegex('/Testing AWS connection/');
+
+        // This will fail due to test credentials, but we're testing the flow
+        $exitCode = $app->run();
+
+        $this->assertEquals(1, $exitCode);
     }
 
     public function testApplicationHandlesException(): void
@@ -138,7 +192,8 @@ class ApplicationTest extends BaseTestCase
         $config = $this->getTestConfig();
         $config['csv_file_path'] = '/nonexistent/path/that/will/cause/error.csv';
 
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Fatal error:/');
 
@@ -154,7 +209,8 @@ class ApplicationTest extends BaseTestCase
         $config['aws_access_key_id'] = 'invalid';
         $config['aws_secret_access_key'] = 'invalid';
 
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Testing AWS connection/');
         $this->expectOutputRegex('/AWS connection failed/');
@@ -167,7 +223,8 @@ class ApplicationTest extends BaseTestCase
     public function testApplicationShowsDomainsBeforeProcessing(): void
     {
         $config = $this->getTestConfig();
-        $app = new Application($config, $this->testOptions);
+        $options = array_merge($this->testOptions, ['delete_domains' => true]);
+        $app = new Application($config, $options);
 
         $this->expectOutputRegex('/Found \d+ valid domains to process/');
 
