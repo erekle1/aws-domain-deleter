@@ -44,10 +44,34 @@ class Application
                 return 0;
             }
 
-            // Check if this is a contact update operation
+            // Check which operation to perform
             if ($this->options['update_contacts']) {
                 return $this->runContactUpdate();
+            } elseif ($this->options['delete_domains']) {
+                return $this->runDomainDeletion();
+            } else {
+                // No operation specified, show help
+                echo "❌ No operation specified. Please choose an operation:\n\n";
+                UserInterface::displayHelp();
+                return 1;
             }
+
+        } catch (\Exception $e) {
+            echo "❌ Fatal error: " . $e->getMessage() . "\n";
+            return 1;
+        }
+    }
+
+    /**
+     * Run domain deletion operation
+     *
+     * @return int Exit code
+     */
+    private function runDomainDeletion(): int
+    {
+        try {
+            echo "🗑️  Domain Deletion Mode\n";
+            echo "======================\n\n";
 
             // Load and validate domains first (before AWS connection)
             $domains = $this->loadDomains();
@@ -69,7 +93,7 @@ class Application
 
             return 0;
         } catch (\Exception $e) {
-            echo "❌ Fatal error: " . $e->getMessage() . "\n";
+            echo "❌ Domain deletion error: " . $e->getMessage() . "\n";
             return 1;
         }
     }

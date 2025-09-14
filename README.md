@@ -201,13 +201,13 @@ another-domain.org,true,false,true
 
 #### Safe Testing (Recommended First Step)
 ```bash
-php delete.php --dry-run
+php aws-domain-manager.php --delete-domains --dry-run
 ```
 This shows what would be deleted without making any changes.
 
 #### Interactive Deletion
 ```bash
-php delete.php
+php aws-domain-manager.php --delete-domains
 ```
 This will:
 1. Test AWS connection
@@ -217,45 +217,48 @@ This will:
 
 #### Force Deletion (No Confirmation)
 ```bash
-php delete.php --force
+php aws-domain-manager.php --delete-domains --force
 ```
 
 ### Domain Contact Updates (NEW!)
 
 #### Preview Contact Updates
 ```bash
-php delete.php --update-contacts --admin-contact --tech-contact --dry-run
+php aws-domain-manager.php --update-contacts --admin-contact --tech-contact --dry-run
 ```
 
 #### Update Admin and Tech Contacts
 ```bash
-php delete.php --update-contacts --admin-contact --tech-contact
+php aws-domain-manager.php --update-contacts --admin-contact --tech-contact
 ```
 
 #### Update All Contact Types
 ```bash
-php delete.php --update-contacts --admin-contact --registrant-contact --tech-contact
+php aws-domain-manager.php --update-contacts --admin-contact --registrant-contact --tech-contact
 ```
 
 #### Force Contact Updates (No Confirmation)
 ```bash
-php delete.php --update-contacts --admin-contact --force
+php aws-domain-manager.php --update-contacts --admin-contact --force
 ```
 ```
 ⚠️ **Use with extreme caution!** Skips confirmation prompt.
 
 ## Command Line Options
 
-### Domain Deletion Options
+### Operations
+- `--delete-domains`: Delete domain hosted zones and registrations
+- `--update-contacts`: Update domain contact information
+
+### Common Options
 - `--dry-run`: Preview actions without making changes
 - `--force`: Skip confirmation prompt (dangerous!)
+- `--help`, `-h`: Show help message
 
-### Contact Update Options (NEW!)
-- `--update-contacts`: Enable contact update mode
+### Contact Update Options
 - `--admin-contact`: Update admin contact for domains
 - `--registrant-contact`: Update registrant contact for domains
 - `--tech-contact`: Update technical contact for domains
-- `--help`, `-h`: Show help message
 
 ## What the Script Does
 
@@ -364,7 +367,7 @@ Script finished.
 
 ```
 aws-domain-deleter/
-├── delete.php              # Main deletion script (v2.0 - restructured)
+├── aws-domain-manager.php    # Main domain management script (v3.0 - supports both deletion and contact updates)
 ├── domains.csv             # List of domains to delete (213 domains ready)
 ├── src/                    # Source code (object-oriented architecture)
 │   ├── Application.php     # Main application orchestrator

@@ -1,18 +1,23 @@
 <?php
 
 /**
- * AWS Route 53 Domain Deleter
+ * AWS Domain Manager
  * 
- * A structured PHP script for safely deleting multiple AWS Route 53 hosted zones
- * for domains listed in a CSV file.
+ * A comprehensive PHP toolkit for managing AWS Route 53 domains.
+ * Supports both domain deletion and contact information updates.
  * 
  * Usage:
- *   php delete.php --dry-run    # Preview mode (recommended first)
- *   php delete.php              # Interactive deletion
- *   php delete.php --force      # Force deletion without confirmation
+ *   # Domain Deletion
+ *   php aws-domain-manager.php --delete-domains --dry-run    # Preview mode
+ *   php aws-domain-manager.php --delete-domains              # Interactive deletion
+ *   php aws-domain-manager.php --delete-domains --force      # Force deletion
+ * 
+ *   # Contact Updates
+ *   php aws-domain-manager.php --update-contacts --admin-contact --dry-run
+ *   php aws-domain-manager.php --update-contacts --admin-contact --tech-contact
  * 
  * @author LeadHub Team
- * @version 2.0
+ * @version 3.0
  */
 
 require 'vendor/autoload.php';
