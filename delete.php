@@ -21,7 +21,7 @@ use App\Application;
 use App\Services\UserInterface;
 
 // Load configuration
-$configPath = __DIR__ . '/config/aws_config.php';
+$configPath = __DIR__ . '/src/config/aws_config.php';
 if (file_exists($configPath)) {
     $config = require $configPath;
 } else {

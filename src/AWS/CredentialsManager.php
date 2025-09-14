@@ -92,6 +92,8 @@ class CredentialsManager
             return 'Instance Profile';
         }
 
+        dd($this->config);
+
         return 'AWS Default Provider Chain';
     }
 }

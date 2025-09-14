@@ -98,7 +98,7 @@ class WorkflowTest extends TestCase
         $configTestScript = __DIR__ . '/../../test_config.php';
         file_put_contents($configTestScript, "<?php
 require 'vendor/autoload.php';
-\$configPath = __DIR__ . '/config/aws_config.php';
+\$configPath = __DIR__ . '/../src/config/aws_config.php';
 if (file_exists(\$configPath)) {
     \$config = require \$configPath;
 } else {

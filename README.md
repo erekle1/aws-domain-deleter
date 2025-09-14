@@ -61,7 +61,7 @@ This script will **permanently delete hosted zones** from AWS Route 53. This act
    ```
 
    **Method C: Config File (Fallback)**
-   Edit `config/aws_config.php` if not using environment variables:
+   Edit `src/config/aws_config.php` if not using environment variables:
    ```php
    return [
        'aws_access_key_id' => 'YOUR_ACCESS_KEY',
@@ -228,7 +228,7 @@ Script finished.
 ## Troubleshooting
 
 ### "AWS connection failed"
-- Check your AWS credentials in `config/aws_config.php`
+- Check your AWS credentials in `src/config/aws_config.php`
 - Verify your AWS region is correct
 - Ensure your AWS user has Route 53 permissions
 - If using temporary credentials, verify your session token is not expired
