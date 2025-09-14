@@ -73,9 +73,6 @@ class ContactUpdateService
         ];
 
         try {
-            // Get current domain information
-            $domainInfo = $this->route53DomainsClient->getDomainDetail(['DomainName' => $domainName]);
-            
             if ($isDryRun) {
                 $results['message'] = "DRY RUN: Would update contacts for {$domainName}";
                 foreach ($contactTypes as $contactType) {
@@ -83,6 +80,9 @@ class ContactUpdateService
                 }
                 return $results;
             }
+
+            // Get current domain information
+            $domainInfo = $this->route53DomainsClient->getDomainDetail(['DomainName' => $domainName]);
 
             $updateParams = ['DomainName' => $domainName];
 
