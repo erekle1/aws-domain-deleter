@@ -11,15 +11,17 @@ class WorkflowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->scriptPath = __DIR__ . '/../../delete.php';
+        $this->scriptPath = __DIR__ . '/../../aws-domain-manager.php';
     }
 
     public function testScriptShowsHelpMessage(): void
     {
         $output = shell_exec("php {$this->scriptPath} --help 2>&1");
 
-        $this->assertStringContainsString('AWS Route 53 Domain Deleter', $output);
-        $this->assertStringContainsString('Usage: php delete.php [options]', $output);
+        $this->assertStringContainsString('AWS Domain Manager', $output);
+        $this->assertStringContainsString('Usage: php aws-domain-manager.php [operation] [options]', $output);
+        $this->assertStringContainsString('--delete-domains', $output);
+        $this->assertStringContainsString('--update-contacts', $output);
         $this->assertStringContainsString('--dry-run', $output);
         $this->assertStringContainsString('--force', $output);
         $this->assertStringContainsString('--help', $output);
@@ -39,7 +41,7 @@ class WorkflowTest extends TestCase
             $envString .= "{$key}='{$value}' ";
         }
 
-        $output = shell_exec("{$envString}php {$this->scriptPath} --dry-run 2>&1");
+        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
 
         $this->assertStringContainsString('No valid AWS credentials found', $output);
     }
@@ -56,7 +58,7 @@ class WorkflowTest extends TestCase
             $envString .= "{$key}='{$value}' ";
         }
 
-        $output = shell_exec("{$envString}php {$this->scriptPath} --dry-run 2>&1");
+        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
 
         $this->assertStringContainsString('DRY RUN MODE', $output);
         $this->assertStringContainsString('No actual deletions will be performed', $output);
@@ -74,7 +76,7 @@ class WorkflowTest extends TestCase
             $envString .= "{$key}='{$value}' ";
         }
 
-        $output = shell_exec("{$envString}php {$this->scriptPath} --dry-run 2>&1");
+        $output = shell_exec("{$envString}php {$this->scriptPath} --delete-domains --dry-run 2>&1");
 
         $this->assertStringContainsString('Found', $output);
         $this->assertStringContainsString('domains to process', $output);

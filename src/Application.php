@@ -45,9 +45,9 @@ class Application
             }
 
             // Check which operation to perform
-            if ($this->options['update_contacts']) {
+            if (isset($this->options['update_contacts']) && $this->options['update_contacts']) {
                 return $this->runContactUpdate();
-            } elseif ($this->options['delete_domains']) {
+            } elseif (isset($this->options['delete_domains']) && $this->options['delete_domains']) {
                 return $this->runDomainDeletion();
             } else {
                 // No operation specified, show help
