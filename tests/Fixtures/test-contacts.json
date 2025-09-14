@@ -1,0 +1,41 @@
+{
+  "admin_contact": {
+    "FirstName": "Test",
+    "LastName": "Admin",
+    "ContactType": "PERSON",
+    "OrganizationName": "Test Organization",
+    "AddressLine1": "123 Test Street",
+    "City": "Test City",
+    "State": "TS",
+    "CountryCode": "US",
+    "ZipCode": "12345",
+    "PhoneNumber": "+1.1234567890",
+    "Email": "admin@test.com"
+  },
+  "registrant_contact": {
+    "FirstName": "Test",
+    "LastName": "Registrant",
+    "ContactType": "PERSON",
+    "OrganizationName": "Test Organization",
+    "AddressLine1": "123 Test Street",
+    "City": "Test City",
+    "State": "TS",
+    "CountryCode": "US",
+    "ZipCode": "12345",
+    "PhoneNumber": "+1.1234567890",
+    "Email": "registrant@test.com"
+  },
+  "tech_contact": {
+    "FirstName": "Test",
+    "LastName": "Tech",
+    "ContactType": "PERSON",
+    "OrganizationName": "Test Organization",
+    "AddressLine1": "123 Test Street",
+    "City": "Test City",
+    "State": "TS",
+    "CountryCode": "US",
+    "ZipCode": "12345",
+    "PhoneNumber": "+1.1234567890",
+    "Email": "tech@test.com"
+  }
+}

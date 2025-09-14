@@ -165,25 +165,39 @@ class ApplicationTest extends BaseTestCase
 
     public function testRunWithContactUpdateOperation(): void
     {
-        $options = [
-            'dry_run' => false,
-            'force' => false,
-            'help' => false,
-            'delete_domains' => false,
-            'update_contacts' => true,
-            'admin_contact' => true,
-            'registrant_contact' => false,
-            'tech_contact' => false
-        ];
-        $app = new Application($this->getTestConfig(), $options);
+        // Create a temporary contacts.json file for testing
+        $testContactsFile = __DIR__ . '/../Fixtures/test-contacts.json';
+        $tempContactsFile = dirname(__DIR__, 2) . '/contacts.json';
+        
+        // Copy test contacts file to project root
+        copy($testContactsFile, $tempContactsFile);
+        
+        try {
+            $options = [
+                'dry_run' => false,
+                'force' => false,
+                'help' => false,
+                'delete_domains' => false,
+                'update_contacts' => true,
+                'admin_contact' => true,
+                'registrant_contact' => false,
+                'tech_contact' => false
+            ];
+            $app = new Application($this->getTestConfig(), $options);
 
-        $this->expectOutputRegex('/Contact Update Mode/');
-        $this->expectOutputRegex('/Testing AWS connection/');
+            $this->expectOutputRegex('/Contact Update Mode/');
+            $this->expectOutputRegex('/Testing AWS connection/');
 
-        // This will fail due to test credentials, but we're testing the flow
-        $exitCode = $app->run();
+            // This will fail due to test credentials, but we're testing the flow
+            $exitCode = $app->run();
 
-        $this->assertEquals(1, $exitCode);
+            $this->assertEquals(1, $exitCode);
+        } finally {
+            // Clean up temporary file
+            if (file_exists($tempContactsFile)) {
+                unlink($tempContactsFile);
+            }
+        }
     }
 
     public function testApplicationHandlesException(): void
