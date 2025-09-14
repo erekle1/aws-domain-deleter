@@ -241,7 +241,7 @@ php delete.php --update-contacts --admin-contact --registrant-contact --tech-con
 ```bash
 php delete.php --update-contacts --admin-contact --force
 ```
-```
+
 ⚠️ **Use with extreme caution!** Skips confirmation prompt.
 
 ## Command Line Options
