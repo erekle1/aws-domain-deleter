@@ -1,9 +1,9 @@
 {
-    "name": "erekle1/aws-domain-deleter",
-    "description": "AWS Route 53 hosted zone and domain registration batch deletion tool",
+    "name": "erekle1/aws-domain-tools",
+    "description": "AWS Route 53 domain management tools - batch deletion and contact updates",
     "type": "project",
     "license": "MIT",
-    "keywords": ["aws", "route53", "domain", "deletion", "dns", "automation"],
+    "keywords": ["aws", "route53", "domain", "deletion", "contact", "update", "dns", "automation", "management"],
     "authors": [
         {
             "name": "Erekle Kereselidze",

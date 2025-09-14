@@ -1,13 +1,14 @@
-# AWS Domain Deleter
+# AWS Domain Tools
 
-A PHP script to safely delete multiple AWS Route 53 hosted zones for domains listed in a CSV file.
+A comprehensive PHP toolkit for managing AWS Route 53 domains - batch deletion and contact updates.
 
 ## ⚠️ Important Safety Warning
 
-This script will **permanently delete hosted zones** from AWS Route 53. This action cannot be undone. Always test with `--dry-run` first!
+This script can **permanently delete hosted zones** and **update domain contact information**. These actions cannot be undone. Always test with `--dry-run` first!
 
 ## Features
 
+### Domain Deletion
 - ✅ Batch deletion of hosted zones from CSV file
 - 🔍 Dry-run mode to preview actions without making changes
 - 🛡️ Safety confirmation prompt (unless using `--force`)
@@ -16,11 +17,17 @@ This script will **permanently delete hosted zones** from AWS Route 53. This act
 - 🚫 Automatic cleanup of DNS records before zone deletion
 - ⏭️ Graceful handling of non-existent domains
 - 🔑 Support for AWS session tokens (temporary credentials)
-- 🏗️ Modular, object-oriented architecture
-- 🚀 Latest AWS SDK for PHP (v3.300+)
-- ⚡ Improved error handling and user experience
-- 🌐 **NEW**: Optional domain registration processing (disable auto-renewal)
+- 🌐 Optional domain registration processing (disable auto-renewal)
 - 🗂️ Separate control for hosted zones vs domain registrations
+
+### Domain Contact Updates (NEW!)
+- 📞 Batch update of domain contact information
+- 👤 Update admin, registrant, and technical contacts
+- 📋 CSV-based domain selection with per-contact-type control
+- 🔍 Dry-run mode for contact updates
+- 📊 Detailed update summary and error reporting
+- 🛡️ Safety confirmation for contact changes
+- 📄 JSON-based contact information management
 
 ## Prerequisites
 
@@ -32,8 +39,8 @@ This script will **permanently delete hosted zones** from AWS Route 53. This act
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/erekle1/aws-domain-deleter.git
-   cd aws-domain-deleter
+   git clone https://github.com/erekle1/aws-domain-tools.git
+   cd aws-domain-tools
    ```
 
 2. Install dependencies:
@@ -113,6 +120,74 @@ Edit `config/aws_config.php` if not using environment variables:
 - **Domain Registration Processing**: Disables auto-renewal and provides transfer instructions  
 - Set `DELETE_DOMAIN_REGISTRATIONS="true"` only if you want to process registered domains
 
+## Contact Update Configuration
+
+### Contact Information File (`contacts.json`)
+Create a `contacts.json` file in the project root with your contact information:
+
+```json
+{
+  "admin_contact": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "contactType": "PERSON",
+    "organizationName": "Your Organization",
+    "addressLine1": "123 Main Street",
+    "city": "Your City",
+    "state": "ST",
+    "countryCode": "US",
+    "zipCode": "12345",
+    "phoneNumber": "+1.5551234567",
+    "email": "admin@yourdomain.com",
+    "extraParams": []
+  },
+  "registrant_contact": {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "contactType": "PERSON",
+    "organizationName": "Your Organization",
+    "addressLine1": "123 Main Street",
+    "city": "Your City",
+    "state": "ST",
+    "countryCode": "US",
+    "zipCode": "12345",
+    "phoneNumber": "+1.5551234567",
+    "email": "registrant@yourdomain.com",
+    "extraParams": []
+  },
+  "tech_contact": {
+    "firstName": "Tech",
+    "lastName": "Support",
+    "contactType": "PERSON",
+    "organizationName": "Your Organization",
+    "addressLine1": "123 Main Street",
+    "city": "Your City",
+    "state": "ST",
+    "countryCode": "US",
+    "zipCode": "12345",
+    "phoneNumber": "+1.5551234567",
+    "email": "tech@yourdomain.com",
+    "extraParams": []
+  }
+}
+```
+
+### Domains to Update File (`domains_to_update.csv`)
+Create a CSV file specifying which domains to update and which contact types:
+
+```csv
+domain_name,update_admin,update_registrant,update_tech
+example.com,true,true,true
+test-domain.com,false,true,false
+another-domain.org,true,false,true
+```
+
+**CSV Columns:**
+- `domain_name`: The domain to update
+- `update_admin`: `true` to update admin contact, `false` to skip
+- `update_registrant`: `true` to update registrant contact, `false` to skip  
+- `update_tech`: `true` to update tech contact, `false` to skip
+
 ### ⚠️ PERMANENT DOMAIN DELETION (EXTREMELY DANGEROUS!)
 - **`PERMANENTLY_DELETE_DOMAINS="true"`**: Uses AWS `deleteDomain` API to **IRREVERSIBLY** delete domain registrations
 - **NO REFUNDS**: You will not receive any refund for deleted domain costs
@@ -122,13 +197,15 @@ Edit `config/aws_config.php` if not using environment variables:
 
 ## Usage
 
-### Safe Testing (Recommended First Step)
+### Domain Deletion
+
+#### Safe Testing (Recommended First Step)
 ```bash
 php delete.php --dry-run
 ```
 This shows what would be deleted without making any changes.
 
-### Interactive Deletion
+#### Interactive Deletion
 ```bash
 php delete.php
 ```
@@ -138,16 +215,47 @@ This will:
 3. Ask for confirmation
 4. Delete hosted zones
 
-### Force Deletion (No Confirmation)
+#### Force Deletion (No Confirmation)
 ```bash
 php delete.php --force
+```
+
+### Domain Contact Updates (NEW!)
+
+#### Preview Contact Updates
+```bash
+php delete.php --update-contacts --admin-contact --tech-contact --dry-run
+```
+
+#### Update Admin and Tech Contacts
+```bash
+php delete.php --update-contacts --admin-contact --tech-contact
+```
+
+#### Update All Contact Types
+```bash
+php delete.php --update-contacts --admin-contact --registrant-contact --tech-contact
+```
+
+#### Force Contact Updates (No Confirmation)
+```bash
+php delete.php --update-contacts --admin-contact --force
+```
 ```
 ⚠️ **Use with extreme caution!** Skips confirmation prompt.
 
 ## Command Line Options
 
+### Domain Deletion Options
 - `--dry-run`: Preview actions without making changes
 - `--force`: Skip confirmation prompt (dangerous!)
+
+### Contact Update Options (NEW!)
+- `--update-contacts`: Enable contact update mode
+- `--admin-contact`: Update admin contact for domains
+- `--registrant-contact`: Update registrant contact for domains
+- `--tech-contact`: Update technical contact for domains
+- `--help`, `-h`: Show help message
 
 ## What the Script Does
 
@@ -163,6 +271,14 @@ php delete.php --force
 2. **Disables auto-renewal** to prevent automatic charges
 3. **Provides transfer instructions** for complete domain removal
 4. **Note**: AWS doesn't allow direct domain deletion - you must transfer out manually
+
+### Contact Update Processing (NEW!)
+1. **Loads contact information** from `contacts.json`
+2. **Reads domain list** from `domains_to_update.csv`
+3. **Tests AWS connection** to Route 53 Domains service
+4. **Updates specified contact types** for each domain
+5. **Provides detailed summary** of successful/failed updates
+6. **Supports dry-run mode** to preview changes without applying them
 
 ### Final Steps
 6. **Provides comprehensive summary** of all operations
